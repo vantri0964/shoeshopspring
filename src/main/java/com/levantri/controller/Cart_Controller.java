@@ -9,14 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.levantri.empty.Order;
 import com.levantri.empty.OrderProduct;
+import com.levantri.empty.Product;
 import com.levantri.service.ProductService;
+
 
 @Controller
 @SessionAttributes("proCart")
@@ -73,14 +78,89 @@ public class Cart_Controller {
 	@GetMapping("index/")
 	public ModelAndView index(HttpSession httpSession, ModelMap modelMap) {
 		ModelAndView model = new ModelAndView();
+		List<Product> listProduct = new ArrayList<Product>();
+		Order order = new Order();
+		float total = 0;
 		if(httpSession.getAttribute("user_id") == null) {
 			model.setViewName("redirect:/");
 		}else {
+			ArrayList<Integer> ids = new ArrayList<Integer>();
 			List<OrderProduct> orderProduct = (List<OrderProduct>) httpSession.getAttribute("proCart");
+			if(orderProduct != null){
+				// Add id select list
+				for(OrderProduct value : orderProduct) {
+					ids.add(value.getId_product());
+					total += (value.getPrice() * value.getCount());
+				}
+				listProduct = productService.listProduct(ids);
+				// Update data orderProduct
+				for(int i=0; i<orderProduct.size(); i++) {
+					for(int j=0; j<listProduct.size(); j++) {
+						if(orderProduct.get(i).getId_product() == listProduct.get(j).getId()) {
+							orderProduct.get(i).setPrice(listProduct.get(j).getPrice());
+							orderProduct.get(i).setName_product(listProduct.get(j).getName());
+							orderProduct.get(i).setImage(listProduct.get(j).getImage());
+						}
+					}
+					
+				}
+			}		
 			model.addObject("listCart", orderProduct);
+			model.addObject("total", total);
 			model.setViewName("cart_index");
 		}
+		model.addObject("order", order);
 		return model;
+	}
+	
+	@PostMapping("index/")
+	public ModelAndView addOrder(HttpSession httpSession,  @ModelAttribute Order order) {
+		ModelAndView model = new ModelAndView();
+		return model;
+	}
+	
+	
+	@GetMapping("update/")
+	@ResponseBody
+	public String update(@RequestParam int id_product, @RequestParam int id_color,
+			@RequestParam int id_size, @RequestParam int count, HttpSession httpSession) {
+			System.out.println("Co qua update");
+			list = (List<OrderProduct>) httpSession.getAttribute("proCart");
+			int i = checkProduct(id_product, id_color, id_size, httpSession);
+			if(i != -1) {	
+				int countProduct = productService.show(id_product).getCount();
+				int sumCount = count;
+				int old_count = 0;
+				if(list != null) {
+					for(OrderProduct value : list) {
+						if(value.getId_product() == id_product) {
+							sumCount += value.getCount();
+							old_count += value.getCount();
+						}
+					}
+					sumCount -= list.get(i).getCount();
+				}
+				if(sumCount > countProduct) {
+					return String.valueOf(countProduct - old_count);
+				}else {
+					list.get(i).setCount(count);
+				}
+			}	
+		return "true";
+	}
+	
+	@GetMapping("delete/")
+	@ResponseBody
+	public String delete(@RequestParam int id_product, @RequestParam int id_color,
+			@RequestParam int id_size, HttpSession httpSession) {
+			System.out.println("Co qua update");
+			list = (List<OrderProduct>) httpSession.getAttribute("proCart");
+			int i = checkProduct(id_product, id_color, id_size, httpSession);
+			if(i != -1) {
+				list.remove(i);
+				return String.valueOf(list.size());
+			}
+		return "false";
 	}
 	
 	@GetMapping("checkcount/")
@@ -88,7 +168,7 @@ public class Cart_Controller {
 	public String checkCount(HttpSession httpSession, @RequestParam int id_product, @RequestParam int count) {
 		int countProduct = productService.show(id_product).getCount();
 		int sumCount = count;
-		List<OrderProduct> orderProduct = (List<OrderProduct>) httpSession.getAttribute("proOder");
+		List<OrderProduct> orderProduct = (List<OrderProduct>) httpSession.getAttribute("proCart");
 		if(orderProduct != null) {
 			for(OrderProduct value : orderProduct) {
 				if(value.getId_product() == id_product) {
@@ -100,6 +180,20 @@ public class Cart_Controller {
 			return String.valueOf(countProduct);
 		}
 		return "true";
+	}
+	
+	@GetMapping("totalprice/")
+	@ResponseBody
+	public String total_price(HttpSession httpSession) {
+		List<OrderProduct> orderProduct = (List<OrderProduct>) httpSession.getAttribute("proCart");
+		if(orderProduct != null) {	
+			float total = 0;
+			for(OrderProduct value : orderProduct) {
+				total += (value.getPrice() * value.getCount());
+			}
+			return String.valueOf(total);
+		}
+		return "false";
 	}
 	
 	@SuppressWarnings({ "unused", "unchecked" })

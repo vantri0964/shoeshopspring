@@ -3,6 +3,7 @@ package com.levantri.empty;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,13 +25,34 @@ public class Order {
 	private int status;
 	private String city;
 	private String address;
+	@Column(nullable = true)
+	private String branch;
+	private String phone;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_user")
 	private User user;
+
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_user_bank")
-	private UserBank user_bank;
+	@JoinColumn(name = "id_user_bank", insertable = false, updatable = false)
+	private Bank user_bank;
 	
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_promotion")
 	private Promotion promotion;
@@ -91,11 +113,11 @@ public class Order {
 		this.user = user;
 	}
 
-	public UserBank getUser_bank() {
+	public Bank getUser_bank() {
 		return user_bank;
 	}
 
-	public void setUser_bank(UserBank user_bank) {
+	public void setUser_bank(Bank user_bank) {
 		this.user_bank = user_bank;
 	}
 

@@ -143,7 +143,9 @@
                             <li id="cart">
                               <a href='<c:url value="/cart/index/"/>'><span class="gi gi-cart_out">
 	                              <c:if test="${user_id != null }">
-	                            	<span id="number">${proCart.size()}</span>
+		                              <c:if test="${proCart != null}">
+		                            	<span id="number">${proCart.size()}</span>
+		                              </c:if>
 	                              </c:if>
                               </span></a>
                             </li>

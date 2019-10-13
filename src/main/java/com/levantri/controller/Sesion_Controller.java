@@ -30,7 +30,7 @@ import com.levantri.empty.User;
 import com.levantri.service.SessionService;
 
 @Controller
-@SessionAttributes("user_id")
+//@SessionAttributes("user_id")
 @RequestMapping("session/")
 public class Sesion_Controller {
 	@Autowired
@@ -85,8 +85,6 @@ public class Sesion_Controller {
 	@GetMapping("logout/")
 	@Transactional
 	public String logout(HttpSession httpSession) {
-		httpSession.setAttribute("user_id", null);
-		httpSession.setAttribute("proCart", null);
 		httpSession.removeAttribute("user_id");
 		httpSession.removeAttribute("proCart");
 	

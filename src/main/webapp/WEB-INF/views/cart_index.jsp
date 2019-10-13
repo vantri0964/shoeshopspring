@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@  page import="com.levantri.empty.OrderProduct" %>
 <%@  page import=" java.util.List" %>
@@ -20,6 +20,7 @@
                     <h1 class="animation-slideDown"><strong>Blue Jacket</strong></h1>
                 </div>
             </section>
+            <jsp:include page="error.jsp"/>
 			<div class="block cart-table">
                             <!-- Table Styles Title -->
                             <div class="block-title">
@@ -52,12 +53,13 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 80px;" class="text-center"><input type="checkbox"></th>
-                                            <th style="width: 150px;" class="text-center"><i class="gi gi-user"></i></th>
                                             <th>Name</th>
                                             <th>Image</th>
                                             <th>Color</th>
                                             <th>Size</th>
-                                            <th>count</th>                        
+                                            <th>count</th> 
+                                            <th>Price</th>
+                                            <th>Total</th>                             
                                             <th style="width: 150px;" class="text-center">Actions</th>
                                         </tr>
                                     </thead>
@@ -69,16 +71,18 @@
 	                                    <c:forEach var="cart" items="${listCart}">
 	                                        <tr>
 	                                            <td class="text-center"><input type="checkbox" id="checkbox1-1" name="checkbox1-1"></td>
-	                                            <td class="text-center"><img src="img/placeholders/avatars/avatar1.jpg" alt="avatar" class="img-circle"></td>
-	                                            <td><a href="page_ready_user_profile.html">${cart.getName_product()}</a></td>
+	                                 
+	                                            <td class="id_product" data-id_product="${cart.getId_product()}"><a href="page_ready_user_profile.html">${cart.getName_product()}</a></td>
 	                                            <td><img alt="" src="" width="150px" height="100px"></td>
-	                                            <td>${cart.getName_color()}</td>
-	                                             <td>${cart.getName_size()}</td>
-	                                            <td><input type="number" value="${cart.getCount()}" class="form-control"></td>
+	                                            <td class="id_color" data-id_color = "${cart.getId_color()}">${cart.getName_color()}</td>
+	                                            <td class="id_size"  data-id_size = "${cart.getId_size()}">${cart.getName_size()}</td>
+	                                            <td class="count_index_cart"><input type="number" value="${cart.getCount()}" class="form-control"><span class="amount-error"></span></td>
+	                                            <td class="price">${cart.getPrice()}</td>
+	                                            <td class="total_index_cart">${cart.getPrice() * cart.getCount()}</td>
 	                                            <td class="text-center">
 	                                                <div class="btn-group btn-group-xs">
-	                                                    <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
-	                                                    <a href="javascript:void(0)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
+	                                                    <a href="javascript:void(0)" class="update_index_cart" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+	                                                    <a href="javascript:void(0)" class="delete_index_cart" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Delete"><i class="fa fa-times"></i></a>
 	                                                </div>
 	                                            </td>
 	                                        </tr>
@@ -86,7 +90,7 @@
 	                                    </tbody>
 	                                    <tfoot>
 	                                        <tr>
-	                                            <td colspan="8">
+	                                            <td colspan="10">
 	                                                <div class="btn-group btn-group-sm pull-right">
 	                                                    <a href="javascript:void(0)" class="btn btn-primary" data-toggle="tooltip" title="" data-original-title="Settings"><i class="fa fa-cog"></i></a>
 	                                                    <div class="btn-group btn-group-sm dropup">
@@ -103,8 +107,9 @@
 	                                                </div>
 	                                                <div class="btn-group btn-group-sm">
 	                                                    <a href="javascript:void(0)" class="btn btn-primary" data-toggle="tooltip" title="" data-original-title="Edit Selected"><i class="fa fa-pencil"></i></a>
-	                                                    <a href="javascript:void(0)" class="btn btn-primary" data-toggle="tooltip" title="" data-original-title="Delete Selected"><i class="fa fa-times"></i></a>
+	                                                    <a href="javascript:void(0)" class="btn btn-primary" data-toggle="tooltip" title="" data-original-title="Delete Selected"><i class="fa fa-times"></i></a>	                             
 	                                                </div>
+	                                                <div><span><b >Total Price:<span id="total_result"> ${total}</span></b></span></div>
 	                                            </td>
 	                                        </tr>
 	                                    </tfoot>
@@ -112,6 +117,69 @@
                                 </table>
                             </div>
                             <!-- END Table Styles Content -->
+                        </div >
+                         <div class="block cart-table col-md-12 col-sm-8">
+                        	<div class="col-sm-5 col-sm-offset-0">
+                                    <!-- Wizard Progress Bar, functionality initialized in js/pages/formsWizard.js -->
+                                    <div class="">
+                                        <h1>CHECKOUT</h1>
+                                    </div>
+                                    <!-- END Wizard Progress Bar -->
+
+                                    <!-- Progress Wizard Content -->
+                                    <form id="progress-wizard"  modelAttribute="order" action="" method="post" class="form-horizontal ui-formwizard">
+                                        <!-- First Step -->
+                                        <div id="progress-first" class="step ui-formwizard-content" style="display: block;">
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="example-email">Số điện thoại</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="example-progress-email" path="phone" class="form-control ui-wizard-content" placeholder="test@example.com">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="example-password">City</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="example-progress-password" path="city" class="form-control ui-wizard-content" placeholder="Choose a crazy one..">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                            	<label class="col-md-4 control-label" for="example-password">Bank</label>
+                                            	<div class="col-md-8">
+	                                                <select id="example-select" path="id_user_bank" class="form-control" size="1">
+	                                                    <option value="0">Please select</option>
+	                                                    <option value="1">Option #1</option>
+	                                                    <option value="2">Option #2</option>
+	                                                    <option value="3">Option #3</option>
+	                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="example-password2">Chi nhánh ngân hàng</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="example-progress-password2" path="branch" class="form-control ui-wizard-content" placeholder="..and confirm it!">
+                                                </div>
+                                            </div>
+                                                   <div class="form-group">
+                                                <label class="col-md-4 control-label" for="example-password2">Địa chỉ chi tiết</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="example-progress-password2" path="address" class="form-control ui-wizard-content" placeholder="..and confirm it!">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END First Step -->
+
+                                        <!-- Form Buttons -->
+                                        <div class="form-group form-actions">
+                                            <div class="col-md-8 col-md-offset-4">
+                                                <input type="reset" class="btn btn-sm btn-warning ui-wizard-content ui-formwizard-button" id="back3" value="Back">
+                                                <input type="submit" class="btn btn-sm btn-primary ui-wizard-content ui-formwizard-button" id="next3" value="Next">
+                                            </div>
+                                        </div>
+                                        <!-- END Form Buttons -->
+                                    </form>
+                                    <!-- END Progress Wizard Content -->
+                                </div>
+                        	
                         </div>
            <jsp:include page="footer_user.jsp"/>
         </div>
