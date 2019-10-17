@@ -31,6 +31,10 @@
 	color: red;
 }
 
+.error{
+	color: red;
+	font-weight: inherit;
+}
 .cart-table{
 	margin: 20px;
 }

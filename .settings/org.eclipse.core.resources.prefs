@@ -1,6 +1,8 @@
 eclipse.preferences.version=1
 encoding//src/main/java/com/levantri/controller/AdminProduct_Controller.java=UTF-8
+encoding//src/main/java/com/levantri/controller/Cart_Controller.java=UTF-8
 encoding//src/main/java/com/levantri/controller/User_Controller.java=UTF-8
+encoding//src/main/java/com/levantri/empty/Order.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/Product_index.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/Sesion_new.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/admin/Product_index.jsp=UTF-8

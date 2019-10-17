@@ -86,16 +86,8 @@ public class Sesion_Controller {
 	@Transactional
 	public String logout(HttpSession httpSession) {
 		httpSession.removeAttribute("user_id");
-		httpSession.removeAttribute("proCart");
-	
-//		if(httpSession.getAttribute("user_id") !=null) {
-//			httpSession.setAttribute("user_id", null);
-//		}
-//		if(httpSession.getAttribute("proCart") !=null) {
-//			httpSession.setAttribute("proCart", null);
-//		}
-//		httpSession.setAttribute("user_id", null);
-//		httpSession.setAttribute("proCart", null);
+		httpSession.removeAttribute("user_name");
+		httpSession.removeAttribute("proCart");	
 		return "redirect:/";
 	}
 }

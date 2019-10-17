@@ -1,13 +1,17 @@
 package com.levantri.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,18 +21,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.levantri.empty.Bank;
 import com.levantri.empty.Order;
 import com.levantri.empty.OrderProduct;
 import com.levantri.empty.Product;
+import com.levantri.empty.User;
+import com.levantri.service.BankService;
+import com.levantri.service.OrderService;
 import com.levantri.service.ProductService;
 
 
 @Controller
-@SessionAttributes("proCart")
 @RequestMapping("cart/")
 public class Cart_Controller {
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
+	private BankService bankService;
 	
 	List<OrderProduct> saveOrder = new ArrayList();
 	private List<OrderProduct> list;
@@ -104,7 +117,10 @@ public class Cart_Controller {
 					}
 					
 				}
-			}		
+			}
+			//List bank
+			List<Bank> listBank = bankService.indexBank();
+			model.addObject("listBank", listBank);
 			model.addObject("listCart", orderProduct);
 			model.addObject("total", total);
 			model.setViewName("cart_index");
@@ -114,8 +130,30 @@ public class Cart_Controller {
 	}
 	
 	@PostMapping("index/")
-	public ModelAndView addOrder(HttpSession httpSession,  @ModelAttribute Order order) {
+	public ModelAndView addOrder(HttpSession httpSession,  @ModelAttribute("order") @Valid Order order,
+				BindingResult result) {
 		ModelAndView model = new ModelAndView();
+		ArrayList<OrderProduct> orderProduct =  (ArrayList<OrderProduct>) httpSession.getAttribute("proCart");
+		if(result.hasErrors()) {
+			//List bank
+			List<Bank> listBank = bankService.indexBank();
+			model.addObject("listBank", listBank);
+			model.setViewName("cart_index");
+		}else {
+			order.setId_user((Integer)httpSession.getAttribute("user_id"));
+			try {
+				int id_order = orderService.createOrder(order);
+				for(OrderProduct value: orderProduct) {
+					value.setId_order(id_order);
+					orderService.saveOrderProduct(value);
+				}
+				httpSession.removeAttribute("proCart");
+				model.setViewName("redirect:/");
+			} catch (Exception e) {
+				System.out.println("Loi " + e);
+				model.setViewName("cart_index");
+			}
+		}
 		return model;
 	}
 	
@@ -208,5 +246,21 @@ public class Cart_Controller {
 		}
 		return -1;
 	}
+	
+	 public static <T> Set<T> convertArrayToSet(ArrayList<OrderProduct> orderProduct) 
+	    { 
+	  
+	        // Create an empty Set 
+	        Set<T> set = new HashSet<T>(); 
+	  
+	        // Iterate through the array 
+	        for (OrderProduct t : orderProduct) { 
+	            // Add each element into the set 
+	            set.add((T) t); 
+	        } 
+	  
+	        // Return the converted Set 
+	        return set; 
+	    } 
 
 }

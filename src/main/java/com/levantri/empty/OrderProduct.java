@@ -119,5 +119,6 @@ public class OrderProduct implements Serializable{
 		this.name_size = name_size;
 		this.count = count;
 	}
+	
 
 }

@@ -22,7 +22,7 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 	  destroy-method="close">
 	    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-	    <property name="url" value="jdbc:mysql://localhost:3306/salespring"/>
+	    <property name="url" value="jdbc:mysql://localhost:3306/salespring?characterEncoding=UTF-8"/>
 	    <property name="username" value="spring"/>
 	    <property name="password" value="123456"/>
 	</bean>

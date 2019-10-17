@@ -45,17 +45,5 @@
 	              <li><a href="javascript:void(0)">Home</a></li>
 	          </ul>
 		</div>
-			 
-		<div class="sidebar-block">
-		   <div class="row">
-		       <div class="col-xs-6 push-bit">
-		           <span class="h3">$ 750<br><small><em id="amount">3 Items</em></small></span>
-		       </div>
-		       <div class="col-xs-6">
-		           <a href="ecom_shopping_cart.html" class="btn btn-sm btn-block btn-success">VIEW CART</a>
-		           <a href="ecom_checkout.html" class="btn btn-sm btn-block btn-danger">CHECKOUT</a>
-		       </div>
-		   </div>
-		</div>
     </aside>
 </div>

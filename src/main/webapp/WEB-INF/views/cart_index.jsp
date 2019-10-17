@@ -2,6 +2,7 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
 <%@  page import="com.levantri.empty.OrderProduct" %>
 <%@  page import=" java.util.List" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>  
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -127,42 +128,48 @@
                                     <!-- END Wizard Progress Bar -->
 
                                     <!-- Progress Wizard Content -->
-                                    <form id="progress-wizard"  modelAttribute="order" action="" method="post" class="form-horizontal ui-formwizard">
+                                    <form:form id="progress-wizard"  modelAttribute="order" action="" method="post" class="form-horizontal ui-formwizard">
                                         <!-- First Step -->
                                         <div id="progress-first" class="step ui-formwizard-content" style="display: block;">
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="example-email">Số điện thoại</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="example-progress-email" path="phone" class="form-control ui-wizard-content" placeholder="test@example.com">
+                                                    <form:input type="text" id="example-progress-email" path="phone" class="form-control ui-wizard-content" placeholder="Điện thoại liên hệ"/>
+                                                	<form:errors path="phone" cssClass="error"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="example-password">City</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="example-progress-password" path="city" class="form-control ui-wizard-content" placeholder="Choose a crazy one..">
+                                                    <form:input type="text" id="example-progress-password" path="city" class="form-control ui-wizard-content" placeholder="Thành phố đang sống"/>
+                                                	<form:errors path="city" cssClass="error"/>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                             	<label class="col-md-4 control-label" for="example-password">Bank</label>
                                             	<div class="col-md-8">
-	                                                <select id="example-select" path="id_user_bank" class="form-control" size="1">
-	                                                    <option value="0">Please select</option>
-	                                                    <option value="1">Option #1</option>
-	                                                    <option value="2">Option #2</option>
-	                                                    <option value="3">Option #3</option>
-	                                                </select>
+	                                                <form:select id="example-select" path="id_user_bank" class="form-control" size="1">
+	                                                    <form:option value="0">Please select</form:option>
+	                                                    <c:if test="${listBank != null }">
+		                                                    <c:forEach items="${listBank}" var="bank">
+		                                                    	<form:option value="${bank.getId()}">${bank.getName()}</form:option>
+		                                                    </c:forEach>
+	                                                    </c:if>
+	                                                 	
+	                                                </form:select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="col-md-4 control-label" for="example-password2">Chi nhánh ngân hàng</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="example-progress-password2" path="branch" class="form-control ui-wizard-content" placeholder="..and confirm it!">
+                                                    <form:input type="text" id="example-progress-password2" path="branch" class="form-control ui-wizard-content" placeholder="Địa chỉ chi tiết đăng ký"/>
                                                 </div>
                                             </div>
                                                    <div class="form-group">
                                                 <label class="col-md-4 control-label" for="example-password2">Địa chỉ chi tiết</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="example-progress-password2" path="address" class="form-control ui-wizard-content" placeholder="..and confirm it!">
+                                                    <form:input type="text" id="example-progress-password2" path="address" class="form-control ui-wizard-content" placeholder="Địa chỉ chi tiết nhận"/>
+                                                	<form:errors path="address" cssClass="error"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -171,12 +178,12 @@
                                         <!-- Form Buttons -->
                                         <div class="form-group form-actions">
                                             <div class="col-md-8 col-md-offset-4">
-                                                <input type="reset" class="btn btn-sm btn-warning ui-wizard-content ui-formwizard-button" id="back3" value="Back">
+                                                <input type="reset" class="btn btn-sm btn-warning ui-wizard-content ui-formwizard-button" id="back3" value="Reset">
                                                 <input type="submit" class="btn btn-sm btn-primary ui-wizard-content ui-formwizard-button" id="next3" value="Next">
                                             </div>
                                         </div>
                                         <!-- END Form Buttons -->
-                                    </form>
+                                    </form:form>>
                                     <!-- END Progress Wizard Content -->
                                 </div>
                         	

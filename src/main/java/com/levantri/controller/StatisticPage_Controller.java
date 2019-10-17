@@ -44,10 +44,9 @@ public class StatisticPage_Controller {
 		ModelAndView modelView = new ModelAndView();
 		Hashtable<String, String> flash = new Hashtable<String, String>();
 		flash = null;
-		System.out.println("sessios is" + httpSession.getAttribute("user_id"));
 		if(httpSession.getAttribute("user_id") != null) {
 			int user_id = (Integer) httpSession.getAttribute("user_id");
-			modelView.addObject("user", generalService.Info(user_id));
+			httpSession.setAttribute("user_name",  generalService.Info(user_id).getName());
 		}
 		if(!flashAttribute.isEmpty()) {
 			flash = flashAttribute;

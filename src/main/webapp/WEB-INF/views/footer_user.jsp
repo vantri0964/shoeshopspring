@@ -21,7 +21,7 @@
                         <div class="col-sm-6 col-md-3">
                             <h4 class="footer-heading">Follow Us</h4>
                             <ul class="footer-nav footer-nav-social list-inline">
-                                <li><a href="javascript:void(0)"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="https://www.facebook.com/trj.le.52"><i class="fa fa-facebook"></i></a></li>
                                 <li><a href="javascript:void(0)"><i class="fa fa-twitter"></i></a></li>
                                 <li><a href="javascript:void(0)"><i class="fa fa-google-plus"></i></a></li>
                                 <li><a href="javascript:void(0)"><i class="fa fa-dribbble"></i></a></li>
@@ -29,9 +29,9 @@
                             </ul>
                         </div>
                         <div class="col-sm-6 col-md-3">
-                            <h4 class="footer-heading"><span id="year-copy">2014</span> &copy; <a href="http://goo.gl/TDOSuC">ProUI Frontend</a></h4>
+                            <h4 class="footer-heading"><span id="">2019</span> &copy; <a href="http://goo.gl/TDOSuC">ShoeShop</a></h4>
                             <ul class="footer-nav list-inline">
-                                <li>Crafted with <i class="fa fa-heart text-danger"></i> by <a href="http://goo.gl/vNS3I">pixelcave</a></li>
+                                <li>Crafted with <i class="fa fa-heart text-danger"></i> by <a href="https://www.facebook.com/trj.le.52">Le Van Tri</a></li>
                             </ul>
                         </div>
                     </div>
